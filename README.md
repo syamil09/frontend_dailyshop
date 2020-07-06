@@ -1,4 +1,4 @@
-# vuekosong
+# dailyshop
 
 ## Project setup
 ```
