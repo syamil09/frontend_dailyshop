@@ -32,39 +32,32 @@
                   Keranjang Belanja &nbsp;
                   <a href="#">
                     <i class="icon_bag_alt"></i>
-                    <span>3</span>
+                    <span>{{ cart.length }}</span>
                   </a>
                   <div class="cart-hover">
                     <div class="select-items">
                       <table>
-                        <tbody>
-                          <tr>
+                        <tbody v-if="cart.length > 0">
+                          <tr 
+                            v-for="item in cart"
+                            :key="item.id">
                             <td class="si-pic">
-                              <img src="img/select-product-1.jpg" alt />
+                              <img :src="item.photo" class="photo-item" alt />
                             </td>
                             <td class="si-text">
                               <div class="product-selected">
-                                <p>$60.00 x 1</p>
-                                <h6>Kabino Bedside Table</h6>
+                                <p>Rp.{{ item.price }}</p>
+                                <h6>{{ item.name }}</h6>
                               </div>
                             </td>
                             <td class="si-close">
                               <i class="ti-close"></i>
                             </td>
                           </tr>
+                        </tbody>
+                        <tbody v-else>
                           <tr>
-                            <td class="si-pic">
-                              <img src="img/select-product-2.jpg" alt />
-                            </td>
-                            <td class="si-text">
-                              <div class="product-selected">
-                                <p>$60.00 x 1</p>
-                                <h6>Kabino Bedside Table</h6>
-                              </div>
-                            </td>
-                            <td class="si-close">
-                              <i class="ti-close"></i>
-                            </td>
+                            <td>Empty cart</td>
                           </tr>
                         </tbody>
                       </table>
@@ -93,6 +86,27 @@
 
 <script>
 export default {
-  name: "Header"
+  name: "Header",
+  data() {
+    return {
+      cart: []
+    }
+  },
+  mounted() {
+    if (localStorage.getItem('cart')) {
+      try {
+        this.cart = JSON.parse(localStorage.getItem('cart'));
+      } catch(e) {
+        localStorage.removeItem('cart');
+      }
+    }
+  }
 };
 </script>
+
+<style scoped>
+  .photo-item {
+    width: 80px;
+    height: 80px;
+  }
+</style>

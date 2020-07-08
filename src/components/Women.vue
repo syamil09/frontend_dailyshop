@@ -16,7 +16,7 @@
 
             <div class="product-item"
                  v-for="itemProduct in products"
-                 v-bind:key="itemProduct.id">
+                 :key="itemProduct.id">
               <div class="pi-pic">
                 <img :src="itemProduct.galleries[0].photo" alt />
                 <ul>
@@ -26,13 +26,13 @@
                     </a>
                   </li>
                   <li class="quick-view">
-                    <router-link to="/product">+ Quick View</router-link>
+                    <router-link :to="'/product/'+itemProduct.id">+ Quick View</router-link>
                   </li>
                 </ul>
               </div>
               <div class="pi-text">
                 <div class="catagory-name">{{ itemProduct.type }}</div>
-                <router-link to="/product">
+                <router-link :to="'/product/'+itemProduct.id">
                   <h5>{{ itemProduct.name }}</h5>
                 </router-link>
                 <div class="product-price">Rp. {{ itemProduct.price }}</div>
