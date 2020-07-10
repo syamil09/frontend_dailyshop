@@ -50,7 +50,7 @@
                                 <h6>{{ item.name }}</h6>
                               </div>
                             </td>
-                            <td class="si-close">
+                            <td @click="removeItem(cart.index)" class="si-close">
                               <i class="ti-close"></i>
                             </td>
                           </tr>
@@ -90,6 +90,13 @@ export default {
   data() {
     return {
       cart: []
+    }
+  },
+  methods: {
+    removeItem(idx) {
+      this.cart.splice(idx);
+      const parsed = JSON.stringify(this.cart);
+      localStorage.setItem('cart', parsed);
     }
   },
   mounted() {
