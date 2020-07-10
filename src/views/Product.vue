@@ -60,12 +60,12 @@
                     <h4>Rp.{{ productDetail.price }}</h4>
                   </div>
                   <div class="quantity">
-                    <router-link to="/cart">
+                    <!-- <router-link to="/cart"> -->
                       <a 
                         href="#" 
                         @click="addToCart(productDetail.id, productDetail.name, productDetail.price, productDetail.galleries[0].photo)" 
                         class="primary-btn pd-cart">Add To Cart</a>
-                    </router-link>
+                    <!-- </router-link> -->
                   </div>
                 </div>
               </div>
@@ -125,6 +125,7 @@ export default {
       this.cart.push(product);
       const parsed = JSON.stringify(this.cart);
       localStorage.setItem('cart', parsed);
+      window.location.reload();
       // localStorage.removeItem('cart');
       // console.log(parsed);
     }

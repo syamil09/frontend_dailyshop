@@ -20,7 +20,8 @@
               <div class="pi-pic">
                 <img :src="itemProduct.galleries[0].photo" alt />
                 <ul>
-                  <li class="w-icon active">
+                  <li class="w-icon active"
+                      @click="addToCart(itemProduct.id, itemProduct.name, itemProduct.price, itemProduct.galleries[0].photo)">
                     <a href="#">
                       <i class="icon_bag_alt"></i>
                     </a>
@@ -64,7 +65,8 @@ export default {
   },
   data() {
     return {
-      products: []
+      products: [],
+      cart: []
     }
   },
   mounted() {
@@ -74,6 +76,28 @@ export default {
       // .then(res => {this.products = res.data.data.data})
       .then(res => {this.products = res.data.data.data;console.log(res.data.data.data[1].galleries[0].photo);})
       .catch(err => console.log(err));
+
+    if (localStorage.getItem('cart')) {
+      try {
+        this.cart = JSON.parse(localStorage.getItem('cart'));
+      } catch(e) {
+        localStorage.removeItem('cart');
+      }
+    }
+  },
+  methods: {
+    addToCart(id, name, price, photo) {
+      const product = {
+        'id': id,
+        'name': name,
+        'price': price,
+        'photo': photo 
+      }
+      this.cart.push(product);
+      const parsed = JSON.stringify(this.cart);
+      localStorage.setItem('cart', parsed);
+      window.location.reload();
+    }
   }
 };
 </script>

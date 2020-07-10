@@ -94,7 +94,8 @@ export default {
   },
   methods: {
     removeItem(idx) {
-      this.cart.splice(idx);
+      this.cart.splice(idx,1);
+      console.log('index array item : '+idx);
       const parsed = JSON.stringify(this.cart);
       localStorage.setItem('cart', parsed);
     }
