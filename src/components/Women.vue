@@ -87,16 +87,21 @@ export default {
   },
   methods: {
     addToCart(id, name, price, photo) {
-      const product = {
+      let cartStorage = JSON.parse(localStorage.getItem('cart'));
+      let findId = cartStorage.filter(item => item.id == id);
+
+      if (findId.length == 0) {
+        const product = {
         'id': id,
         'name': name,
         'price': price,
         'photo': photo 
+        }
+        this.cart.push(product);
+        const parsed = JSON.stringify(this.cart);
+        localStorage.setItem('cart', parsed);
+        window.location.reload();
       }
-      this.cart.push(product);
-      const parsed = JSON.stringify(this.cart);
-      localStorage.setItem('cart', parsed);
-      window.location.reload();
     }
   }
 };
