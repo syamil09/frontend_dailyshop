@@ -87,15 +87,15 @@ export default {
   },
   methods: {
     addToCart(id, name, price, photo) {
-      let cartStorage = JSON.parse(localStorage.getItem('cart'));
-      let findId = cartStorage.filter(item => item.id == id);
+      let cartStorage = JSON.parse(localStorage.getItem('cart')) ?? [];
+      let findId = cartStorage.find(item => item.id == id);
 
-      if (findId.length == 0) {
+      if (findId == undefined) {
         const product = {
-        'id': id,
-        'name': name,
-        'price': price,
-        'photo': photo 
+          'id': id,
+          'name': name,
+          'price': price,
+          'photo': photo 
         }
         this.cart.push(product);
         const parsed = JSON.stringify(this.cart);

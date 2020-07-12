@@ -38,7 +38,7 @@
                     <tbody>
                       <tr v-for="item in cart" :key="item.id">
                         <td class="cart-pic first-row">
-                          <img :src="item.photo" />
+                          <img class="img-cart" :src="item.photo" />
                         </td>
                         <td class="cart-title first-row text-center">
                           <h5>{{ item.name }}</h5>
@@ -181,5 +181,9 @@ export default {
 <style scoped>
   .material-icons {
     cursor: pointer;
+  }
+  .img-cart {
+    width: 100px;
+    height: 100px;
   }
 </style>
