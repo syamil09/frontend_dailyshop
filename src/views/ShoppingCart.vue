@@ -36,34 +36,21 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
+                      <tr v-for="item in cart" :key="item.id">
                         <td class="cart-pic first-row">
-                          <img src="img/cart-page/product-1.jpg" />
+                          <img :src="item.photo" />
                         </td>
                         <td class="cart-title first-row text-center">
-                          <h5>Pure Pineapple</h5>
+                          <h5>{{ item.name }}</h5>
                         </td>
-                        <td class="p-price first-row">$60.00</td>
+                        <td class="p-price first-row">Rp.{{ item.price }}</td>
                         <td class="delete-item">
-                          <a href="#">
-                            <i class="material-icons">close</i>
-                          </a>
+                          <!-- <a href="#"> -->
+                            <i class="material-icons" @click="removeItem(item.id)">close</i>
+                          <!-- </a> -->
                         </td>
                       </tr>
-                      <tr>
-                        <td class="cart-pic first-row">
-                          <img src="img/cart-page/product-1.jpg" />
-                        </td>
-                        <td class="cart-title first-row text-center">
-                          <h5>Pure Pineapple</h5>
-                        </td>
-                        <td class="p-price first-row">$60.00</td>
-                        <td class="delete-item">
-                          <a href="#">
-                            <i class="material-icons">close</i>
-                          </a>
-                        </td>
-                      </tr>
+                  
                     </tbody>
                   </table>
                 </div>
@@ -166,6 +153,33 @@ export default {
   name: "Cart",
   components: {
     Header
+  },
+  data() {
+    return {
+      cart: []
+    } 
+  },
+  mounted() {
+    let cart = JSON.parse(localStorage.getItem('cart'));
+    this.cart = cart;
+  },
+  methods: {
+    removeItem(idx) {
+      let cartStorage = JSON.parse(localStorage.getItem('cart'));
+      let itemCartStorage = cartStorage.map(item => item.id);
+      let index = itemCartStorage.findIndex(id => id == idx);
+      this.cart.splice(index, 1);
+
+      const parsed = JSON.stringify(this.cart);
+      localStorage.setItem('cart', parsed);
+      window.location.reload();
+    }
   }
 };
 </script>
+
+<style scoped>
+  .material-icons {
+    cursor: pointer;
+  }
+</style>
