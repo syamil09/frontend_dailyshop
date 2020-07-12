@@ -57,7 +57,7 @@
                   </div>
                   <div class="pd-desc">
                     <p v-html="productDetail.description"></p>
-                    <h4>Rp.{{ productDetail.price }}</h4>
+                    <h4>Rp. {{ toRupiah(productDetail.price) }}</h4>
                   </div>
                   <div class="quantity">
                     <!-- <router-link to="/cart"> -->
@@ -130,7 +130,20 @@ export default {
         const parsed = JSON.stringify(this.cart);
         localStorage.setItem('cart', parsed);
         window.location.reload();
+      } 
+    },
+    toRupiah(number) {
+      let number_string = number.toString(),
+        sisa  = number_string.length % 3,
+        rupiah  = number_string.substr(0, sisa),
+        ribuan  = number_string.substr(sisa).match(/\d{3}/g);
+          
+      if (ribuan) {
+        let separator = sisa ? '.' : '';
+        rupiah += separator + ribuan.join('.');
       }
+
+      return rupiah;
     }
   },
   mounted() {

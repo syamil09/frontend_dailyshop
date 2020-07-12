@@ -64,7 +64,7 @@
                     </div>
                     <div class="select-total">
                       <span>total:</span>
-                      <h5>$120.00</h5>
+                      <h5>Rp. {{ toRupiah(totalPrice) }}</h5>
                     </div>
                     <div class="select-button">
                       <a href="#/cart" class="primary-btn view-card">
@@ -103,6 +103,19 @@ export default {
       const parsed = JSON.stringify(this.cart);
       localStorage.setItem('cart', parsed);
       window.location.reload();
+    },
+    toRupiah(number) {
+      let number_string = number.toString(),
+        sisa  = number_string.length % 3,
+        rupiah  = number_string.substr(0, sisa),
+        ribuan  = number_string.substr(sisa).match(/\d{3}/g);
+          
+      if (ribuan) {
+        let separator = sisa ? '.' : '';
+        rupiah += separator + ribuan.join('.');
+      }
+
+      return rupiah;
     }
   },
   mounted() {
@@ -112,6 +125,11 @@ export default {
       } catch(e) {
         localStorage.removeItem('cart');
       }
+    }
+  },
+  computed: {
+    totalPrice() {
+      return this.cart.reduce((total, item) => total + item.price,0);
     }
   }
 };
