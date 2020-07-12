@@ -116,18 +116,21 @@ export default {
       this.thumbs = data.galleries;
     },
     addToCart(id, name, price, photo) {
-      const product = {
-        'id': id,
-        'name': name,
-        'price': price,
-        'photo': photo 
+      let cartStorage = JSON.parse(localStorage.getItem('cart')) ?? [];
+      let findId = cartStorage.find(item => item.id == id);
+
+      if (findId == undefined) {
+        const product = {
+          'id': id,
+          'name': name,
+          'price': price,
+          'photo': photo 
+        }
+        this.cart.push(product);
+        const parsed = JSON.stringify(this.cart);
+        localStorage.setItem('cart', parsed);
+        window.location.reload();
       }
-      this.cart.push(product);
-      const parsed = JSON.stringify(this.cart);
-      localStorage.setItem('cart', parsed);
-      window.location.reload();
-      // localStorage.removeItem('cart');
-      // console.log(parsed);
     }
   },
   mounted() {
