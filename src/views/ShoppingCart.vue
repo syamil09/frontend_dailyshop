@@ -68,6 +68,7 @@
                         id="namaLengkap"
                         aria-describedby="namaHelp"
                         placeholder="Masukan Nama"
+                        v-model="customerInfo.name"
                       />
                     </div>
                     <div class="form-group">
@@ -78,6 +79,7 @@
                         id="emailAddress"
                         aria-describedby="emailHelp"
                         placeholder="Masukan Email"
+                        v-model="customerInfo.email"
                       />
                     </div>
                     <div class="form-group">
@@ -88,11 +90,15 @@
                         id="noHP"
                         aria-describedby="noHPHelp"
                         placeholder="Masukan No. HP"
+                        v-model="customerInfo.phone"
                       />
                     </div>
                     <div class="form-group">
                       <label for="alamatLengkap">Alamat Lengkap</label>
-                      <textarea class="form-control" id="alamatLengkap" rows="3"></textarea>
+                      <textarea class="form-control" 
+                                id="alamatLengkap" 
+                                rows="3"
+                                v-model="customerInfo.address"></textarea>
                     </div>
                   </form>
                 </div>
@@ -111,7 +117,7 @@
                     </li>
                     <li class="subtotal mt-3">
                       Subtotal
-                      <span>$240.00</span>
+                      <span>Rp. {{ totalPrice }}</span>
                     </li>
                     <li class="subtotal mt-3">
                       Pajak
@@ -119,7 +125,7 @@
                     </li>
                     <li class="subtotal mt-3">
                       Total Biaya
-                      <span>$440.00</span>
+                      <span>Rp. {{ totalCost }}</span>
                     </li>
                     <li class="subtotal mt-3">
                       Bank Transfer
@@ -133,8 +139,12 @@
                       Nama Penerima
                       <span>Shayna</span>
                     </li>
+                    <li class="subtotal mt-3">
+                      Nama Pengirim
+                      <span>{{ customerInfo.name }}</span>
+                    </li>
                   </ul>
-                  <router-link to="/success" class="proceed-btn">I ALREADY PAID</router-link>
+                  <a  @click="chekcout()" href="#" class="proceed-btn">I ALREADY PAID</a>
                 </div>
               </div>
             </div>
@@ -148,6 +158,7 @@
 
 <script>
 import Header from "@/components/Header.vue";
+import axios from "axios";
 
 export default {
   name: "Cart",
@@ -156,7 +167,13 @@ export default {
   },
   data() {
     return {
-      cart: []
+      cart: [],
+      customerInfo: {
+        name: '',
+        email: '',
+        phone: '',
+        address: ''
+      }
     } 
   },
   mounted() {
@@ -173,6 +190,36 @@ export default {
       const parsed = JSON.stringify(this.cart);
       localStorage.setItem('cart', parsed);
       window.location.reload();
+    },
+    chekcout() {
+      let productIds = this.cart.map(product => product.id);
+      let chekcoutData = {
+        name: this.customerInfo.name,
+        email: this.customerInfo.email,
+        number: this.customerInfo.phone,
+        address: this.customerInfo.address,
+        transactions_total: this.totalCost,
+        transactions_status: "PENDING",
+        transaction_details: productIds
+      };
+
+      axios.
+        post("http://127.0.0.1:8000/api/checkout",chekcoutData)
+        .then(() => this.$router.push("success"))
+        .catch(err => console.log(err));
+
+        console.log(this.totalCost);
+    }
+  },
+  computed: {
+    totalPrice() {
+      return this.cart.reduce((total, item) => total + item.price,0);
+    },
+    tax() {
+      return (this.totalPrice * 10) / 100;
+    },
+    totalCost() {
+      return this.totalPrice + this.tax;
     }
   }
 };
